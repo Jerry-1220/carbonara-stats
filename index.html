@@ -11,8 +11,8 @@
   <style>
     :root {
       --bg: #ffffff;
-      --surface: #f8f9fa;
-      --text: #1f1f1f;
+      --surface: #ffffff;
+      --text: #1b1b1b;
       --muted: #5f6368;
       --accent: #1a73e8;
       font-family: "Roboto", "Segoe UI", system-ui, sans-serif;
@@ -20,7 +20,7 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: var(--surface);
+      background: var(--bg);
       color: var(--text);
       line-height: 1.5;
       padding: clamp(16px, 4vw, 40px);
@@ -28,11 +28,6 @@
     .shell {
       max-width: 900px;
       margin: 0 auto;
-      background: #fff;
-      border-radius: 20px;
-      border: 1px solid rgba(15, 14, 32, 0.08);
-      box-shadow: 0 18px 40px rgba(15, 14, 32, 0.08);
-      padding: clamp(20px, 4vw, 28px);
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -46,30 +41,30 @@
       font-weight: 700;
     }
     header p {
-      margin: 4px 0 0;
+      margin: 6px 0 0;
       color: var(--muted);
       font-size: 15px;
     }
     .status {
       margin: 0;
       padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(15, 14, 32, 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(15, 14, 32, 0.12);
       background: var(--surface);
       color: var(--muted);
-      text-align: center;
       font-size: 14px;
+      text-align: center;
     }
     .status.hidden { display: none; }
-    .status.error { color: #c5221f; border-color: rgba(197, 34, 31, 0.18); background: #fff7f7; }
+    .status.error { color: #c5221f; border-color: rgba(197, 34, 31, 0.22); background: #fff7f7; }
     .tabs {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 8px;
+      gap: 10px;
     }
     .tabs button {
-      border: none;
-      border-radius: 12px;
+      border: 1px solid rgba(15, 14, 32, 0.12);
+      border-radius: 14px;
       padding: 10px 0;
       background: rgba(26, 115, 232, 0.08);
       color: var(--muted);
@@ -79,18 +74,15 @@
     }
     .tabs button.active {
       background: var(--accent);
-      color: white;
-      box-shadow: 0 8px 20px rgba(26, 115, 232, 0.35);
+      color: #fff;
+      border-color: var(--accent);
     }
-    .grid {
-      display: grid;
-      gap: 12px;
-    }
+    .grid { display: flex; flex-direction: column; gap: 12px; }
     .card {
-      background: #fff;
+      background: var(--surface);
       border-radius: 16px;
-      border: 1px solid rgba(15, 14, 32, 0.08);
-      padding: 16px 18px;
+      border: 1px solid rgba(15, 14, 32, 0.12);
+      padding: clamp(14px, 2vw, 18px);
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -104,14 +96,14 @@
     }
     .card h3 {
       margin: 0;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 20px;
+      font-weight: 700;
     }
     .muted { color: var(--muted); font-size: 14px; }
     .pill {
       padding: 4px 12px;
       border-radius: 999px;
-      background: rgba(26, 115, 232, 0.12);
+      background: rgba(26, 115, 232, 0.15);
       color: var(--accent);
       font-weight: 600;
     }
@@ -119,32 +111,51 @@
       list-style: none;
       margin: 0;
       padding-left: 14px;
-      border-left: 3px solid rgba(15, 14, 32, 0.08);
+      border-left: 3px solid rgba(15, 14, 32, 0.12);
       display: flex;
       flex-direction: column;
       gap: 6px;
       font-size: 14px;
     }
+    .timeline-card {
+      border-color: rgba(26, 115, 232, 0.35);
+    }
+    .timeline-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .username-badge {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 10px;
+      border: 1px solid rgba(15, 14, 32, 0.12);
+    }
     table {
       width: 100%;
+      min-width: 520px;
       border-collapse: collapse;
       font-size: 14px;
     }
     th, td {
       text-align: left;
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-bottom: 1px solid rgba(15, 14, 32, 0.08);
+      background: #fff;
     }
     th {
       color: var(--muted);
       font-size: 12px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-    }
-    @media (max-width: 480px) {
-      .card { padding: 14px; }
-      ul.list { padding-left: 10px; }
-      th, td { padding: 6px 8px; }
     }
   </style>
 </head>
@@ -181,42 +192,31 @@
           hour: '2-digit',
           minute: '2-digit'
         }).format(new Date(value));
-      } catch {
-        return value;
-      }
+      } catch { return value; }
     };
 
     if (!SUPABASE_URL || !SUPABASE_KEY) {
       statusEl.textContent = 'Please provide Supabase credentials.';
       statusEl.classList.add('error');
     } else {
-      const restHeaders = {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`
-      };
-
+      const restHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
       async function fetchJson(view, query = '') {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/${view}${query}`, { headers: restHeaders });
-        if (!res.ok) {
-          throw new Error(await res.text() || res.statusText);
-        }
-        return res.json();
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/${view}${query}`, { headers: restHeaders });
+        if (!response.ok) throw new Error(await response.text() || response.statusText);
+        return response.json();
       }
-
       async function loadData() {
         const [users, records] = await Promise.all([
           fetchJson('users', '?select=id,username,displayname,email,points,created&order=points.desc'),
           fetchJson('records', '?select=r_user_id,r_points,r_mission_id,r_created,missions(m_name,m_type)')
         ]);
-
         const grouped = new Map();
         records.forEach((rec) => {
-          const list = grouped.get(rec.r_user_id) ?? [];
-          list.push(rec);
-          grouped.set(rec.r_user_id, list);
+          const arr = grouped.get(rec.r_user_id) ?? [];
+          arr.push(rec);
+          grouped.set(rec.r_user_id, arr);
         });
-
-        const withRecords = users.map((user) => ({
+        const usersWithRecords = users.map((user) => ({
           ...user,
           records: (grouped.get(user.id) ?? []).map((rec) => ({
             missionName: rec.missions?.m_name ?? rec.r_mission_id,
@@ -225,20 +225,17 @@
             created: rec.r_created
           })).sort((a, b) => new Date(b.created) - new Date(a.created))
         }));
-
         const timeline = records
           .map((rec) => ({
             missionName: rec.missions?.m_name ?? rec.r_mission_id,
             missionType: rec.missions?.m_type ?? 'unknown',
-            userId: rec.r_user_id,
             points: rec.r_points,
-            created: rec.r_created
+            created: rec.r_created,
+            userId: rec.r_user_id
           }))
           .sort((a, b) => new Date(b.created) - new Date(a.created));
-
-        return { users: withRecords, timeline, usersById: new Map(users.map((u) => [u.id, u])) };
+        return { users: usersWithRecords, timeline, usersById: new Map(users.map((u) => [u.id, u])) };
       }
-
       function renderUsers(data) {
         viewEl.innerHTML = '';
         if (!data.users.length) {
@@ -246,8 +243,12 @@
           return;
         }
         data.users.forEach((user) => {
-          const card = document.createElement('div');
-          card.className = 'card';
+      const card = document.createElement('div');
+      card.className = 'card';
+      if ((user.points ?? 0) === 0) {
+        card.style.borderColor = 'rgba(255, 99, 132, 0.4)';
+        card.style.background = 'rgba(255, 241, 244, 0.7)';
+      }
           const header = document.createElement('header');
           header.innerHTML = `<div><h3>${user.username || '(user)'}</h3><div class="muted">${user.displayname || ''}</div></div>`;
           const pill = document.createElement('div');
@@ -255,7 +256,6 @@
           pill.textContent = `${user.points ?? 0} pts`;
           header.append(pill);
           card.append(header);
-
           const list = document.createElement('ul');
           list.className = 'list';
           if (!user.records.length) {
@@ -273,7 +273,6 @@
           viewEl.append(card);
         });
       }
-
       function renderTimeline(data) {
         viewEl.innerHTML = '';
         if (!data.timeline.length) {
@@ -282,25 +281,26 @@
         }
         data.timeline.forEach((mission) => {
           const card = document.createElement('div');
-          card.className = 'card';
+          card.className = 'card timeline-card';
           const user = data.usersById.get(mission.userId);
           card.innerHTML = `<header><div><h3>${mission.missionName}</h3><div class="muted">${mission.missionType}</div></div><div class="pill">${mission.points} pts</div></header>`;
-          const info = document.createElement('p');
-          info.className = 'muted';
-          info.textContent = `${formatDate(mission.created)} · ${user?.username ?? 'unknown user'}`;
-          card.append(info);
+          const meta = document.createElement('div');
+          meta.className = 'timeline-meta';
+          meta.innerHTML = `<span class="username-badge">${user?.username ?? 'unknown user'}</span><span class="muted">${formatDate(mission.created)}</span>`;
+          card.append(meta);
           viewEl.append(card);
         });
       }
-
       function renderDirectory(data) {
         viewEl.innerHTML = '';
         if (!data.users.length) {
           viewEl.textContent = 'No users found.';
           return;
         }
-        const tableWrap = document.createElement('div');
-        tableWrap.className = 'card';
+        const card = document.createElement('div');
+        card.className = 'card';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper';
         const table = document.createElement('table');
         table.innerHTML = '<thead><tr><th>Name</th><th>Email</th><th>Points</th><th>Created</th></tr></thead>';
         const tbody = document.createElement('tbody');
@@ -308,29 +308,28 @@
           .sort((a, b) => new Date(b.created ?? 0) - new Date(a.created ?? 0))
           .forEach((user) => {
             const row = document.createElement('tr');
+            if ((user.points ?? 0) === 0) {
+              row.style.background = 'rgba(255, 241, 244, 0.8)';
+            }
             row.innerHTML = `<td>${user.displayname || user.username || '(user)'}</td><td>${user.email ?? ''}</td><td>${user.points ?? 0}</td><td>${user.created ? formatDate(user.created) : ''}</td>`;
             tbody.append(row);
           });
         table.append(tbody);
-        tableWrap.append(table);
-        viewEl.append(tableWrap);
+        wrapper.append(table);
+        card.append(wrapper);
+        viewEl.append(card);
       }
-
       function render() {
         if (!state) return;
         if (currentMode === 'users') renderUsers(state);
         else if (currentMode === 'missions') renderTimeline(state);
         else renderDirectory(state);
       }
-
-      tabs.forEach((tab) =>
-        tab.addEventListener('click', () => {
-          currentMode = tab.dataset.mode;
-          tabs.forEach((btn) => btn.classList.toggle('active', btn === tab));
-          render();
-        })
-      );
-
+      tabs.forEach((tab) => tab.addEventListener('click', () => {
+        currentMode = tab.dataset.mode;
+        tabs.forEach((btn) => btn.classList.toggle('active', btn === tab));
+        render();
+      }));
       (async () => {
         try {
           statusEl.textContent = 'Loading data…';
@@ -338,7 +337,6 @@
           statusEl.classList.add('hidden');
           render();
         } catch (error) {
-          console.error(error);
           statusEl.textContent = `Failed to load data: ${error.message}`;
           statusEl.classList.add('error');
         }
