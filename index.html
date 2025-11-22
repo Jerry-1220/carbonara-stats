@@ -227,7 +227,51 @@
       transform: translateX(18px);
     }
 
-    .hidden { display: none; }
+    .hidden { display: none !important; }
+
+    .user-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .user-rank {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(96, 108, 59, 0.12);
+      color: #3f4827;
+      font-weight: 800;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .user-names h3 {
+      margin: 0;
+      font-size: 18px;
+      text-align: left;
+    }
+
+    .user-names .muted {
+      text-align: left;
+    }
+
+    .toggle-details {
+      border: 1px solid rgba(15, 14, 32, 0.12);
+      background: #fff;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
     .mission-header {
       display: grid;
@@ -647,7 +691,7 @@
           return;
         }
         setSummary(`Total users: ${data.users.length}`);
-        data.users.forEach((user) => {
+        data.users.forEach((user, index) => {
       const card = document.createElement('div');
       card.className = 'card';
       if (isStaff(user)) {
@@ -657,14 +701,30 @@
         card.style.background = 'rgba(255, 241, 244, 0.7)';
       }
           const header = document.createElement('header');
-          header.innerHTML = `<div><h3>${user.username || '(user)'}</h3><div class="muted">${user.displayname || ''}</div></div>`;
+          header.className = 'user-header';
+          header.innerHTML = `
+            <div class="user-main">
+              <span class="user-rank">#${index + 1}</span>
+              <div class="user-names">
+                <h3>${user.displayname || user.username || '(user)'}</h3>
+                <div class="muted">@${user.username || ''}</div>
+              </div>
+            </div>
+          `;
           const pill = document.createElement('div');
           pill.className = 'pill';
           pill.textContent = `${user.points ?? 0} pts`;
           header.append(pill);
           card.append(header);
+
+          const toggle = document.createElement('button');
+          toggle.className = 'toggle-details';
+          toggle.type = 'button';
+          toggle.textContent = 'Show details';
+          card.append(toggle);
+
           const list = document.createElement('ul');
-          list.className = 'list';
+          list.className = 'list hidden';
           if (!user.records.length) {
             const li = document.createElement('li');
             li.textContent = 'No missions completed yet.';
@@ -684,6 +744,10 @@
             });
           }
           card.append(list);
+          toggle.addEventListener('click', () => {
+            list.classList.toggle('hidden');
+            toggle.textContent = list.classList.contains('hidden') ? 'Show details' : 'Hide details';
+          });
           viewEl.append(card);
         });
       }
