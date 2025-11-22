@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,10 +15,14 @@
       --surface: #ffffff;
       --text: #1b1b1b;
       --muted: #5f6368;
-      --accent: #1a73e8;
+      --accent: #606C3B;
       font-family: "Roboto", "Segoe UI", system-ui, sans-serif;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       background: var(--bg);
@@ -25,26 +30,35 @@
       line-height: 1.5;
       padding: clamp(16px, 4vw, 40px);
     }
+
     .shell {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 18px;
+      padding: clamp(12px, 3vw, 24px);
+      background: #fdfdfb;
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
     }
+
     header {
       text-align: center;
     }
+
     header h1 {
       margin: 0;
       font-size: clamp(24px, 4vw, 32px);
       font-weight: 700;
     }
+
     header p {
       margin: 6px 0 0;
       color: var(--muted);
       font-size: 15px;
     }
+
     .status {
       margin: 0;
       padding: 10px 14px;
@@ -55,38 +69,56 @@
       font-size: 14px;
       text-align: center;
     }
-    .status.hidden { display: none; }
-    .status.error { color: #c5221f; border-color: rgba(197, 34, 31, 0.22); background: #fff7f7; }
+
+    .status.hidden {
+      display: none;
+    }
+
+    .status.error {
+      color: #c5221f;
+      border-color: rgba(197, 34, 31, 0.22);
+      background: #fff7f7;
+    }
+
     .tabs {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 10px;
     }
+
     .tabs button {
       border: 1px solid rgba(15, 14, 32, 0.12);
       border-radius: 14px;
       padding: 10px 0;
-      background: rgba(26, 115, 232, 0.08);
+      background: rgba(96, 108, 59, 0.08);
       color: var(--muted);
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .tabs button.active {
       background: var(--accent);
       color: #fff;
       border-color: var(--accent);
     }
-    .grid { display: flex; flex-direction: column; gap: 12px; }
+
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
     .card {
       background: var(--surface);
-      border-radius: 16px;
-      border: 1px solid rgba(15, 14, 32, 0.12);
+      border-radius: 18px;
+      border: 1px solid rgba(15, 14, 32, 0.08);
       padding: clamp(14px, 2vw, 18px);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
+
     .card header {
       display: flex;
       justify-content: space-between;
@@ -94,19 +126,199 @@
       gap: 8px;
       flex-wrap: wrap;
     }
+
     .card h3 {
       margin: 0;
       font-size: 20px;
       font-weight: 700;
     }
-    .muted { color: var(--muted); font-size: 14px; }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .pill {
       padding: 4px 12px;
       border-radius: 999px;
-      background: rgba(26, 115, 232, 0.15);
+      background: rgba(96, 108, 59, 0.15);
       color: var(--accent);
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
+
+    .pill-success {
+      background: rgba(24, 141, 80, 0.15);
+      color: #188d50;
+    }
+
+    .pill-fail {
+      background: rgba(220, 53, 69, 0.15);
+      color: #dc3545;
+    }
+
+    .summary {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .switch {
+      position: relative;
+      width: 42px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.2s ease;
+      border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .switch input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    .switch input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    .hidden { display: none; }
+
+    .mission-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .mission-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .mission-emoji {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .mission-title-text h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .mission-title-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .mission-materials {
+      font-size: 14px;
+      display: block;
+    }
+
+    .mission-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .mission-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .mission-carbon {
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+      .tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .tabs button {
+        padding: 10px 8px;
+        font-size: 14px;
+      }
+      .mission-header {
+        grid-template-columns: 1fr;
+      }
+      .mission-meta {
+        width: 100%;
+        align-items: flex-start;
+      }
+      .mission-stats {
+        justify-content: flex-start;
+      }
+      .mission-title-text h3 {
+        font-size: 18px;
+      }
+    }
+
     ul.list {
       list-style: none;
       margin: 0;
@@ -117,9 +329,11 @@
       gap: 6px;
       font-size: 14px;
     }
+
     .timeline-card {
-      border-color: rgba(26, 115, 232, 0.35);
+      border-color: rgba(96, 108, 59, 0.35);
     }
+
     .timeline-meta {
       display: flex;
       justify-content: space-between;
@@ -127,11 +341,13 @@
       flex-wrap: wrap;
       gap: 6px;
     }
+
     .username-badge {
       font-size: 16px;
       font-weight: 600;
       color: #0f172a;
     }
+
     .table-wrapper {
       width: 100%;
       overflow-x: auto;
@@ -139,18 +355,22 @@
       border-radius: 10px;
       border: 1px solid rgba(15, 14, 32, 0.12);
     }
+
     table {
       width: 100%;
       min-width: 520px;
       border-collapse: collapse;
       font-size: 14px;
     }
-    th, td {
+
+    th,
+    td {
       text-align: left;
       padding: 10px 12px;
       border-bottom: 1px solid rgba(15, 14, 32, 0.08);
       background: #fff;
     }
+
     th {
       color: var(--muted);
       font-size: 12px;
@@ -159,17 +379,29 @@
     }
   </style>
 </head>
+
 <body>
   <div class="shell">
     <header>
-      <h1>Mission Progress</h1>
-      <p>Live overview of user contributions and mission timeline.</p>
+      <h1>CarbonARA Dashboard</h1>
     </header>
     <p class="status" id="status">Initializing…</p>
     <div class="tabs">
       <button type="button" class="active" data-mode="users">By User</button>
       <button type="button" data-mode="missions">All Missions</button>
+      <button type="button" data-mode="arcade-users">Arcade by User</button>
+      <button type="button" data-mode="arcade-timeline">Arcade Missions</button>
       <button type="button" data-mode="directory">User Directory</button>
+    </div>
+    <div class="controls">
+      <p class="summary" id="summary"></p>
+      <label class="toggle" for="includeStaff">
+        <div class="switch">
+          <input type="checkbox" id="includeStaff" checked />
+          <span class="slider"></span>
+        </div>
+        <span>Include Staff</span>
+      </label>
     </div>
     <div id="view" class="grid"></div>
   </div>
@@ -182,17 +414,116 @@
     const tabs = document.querySelectorAll('[data-mode]');
     let currentMode = 'users';
     let state = null;
+    const summaryEl = document.getElementById('summary');
+    const includeStaffToggle = document.getElementById('includeStaff');
+    let includeStaff = true;
+    const staffUsernames = new Set(['serpyc', 'skcb2543', 'yannn', 'greenwong0417']);
 
-    const formatDate = (value) => {
+    const addHours = (date, hours) => {
+      const d = new Date(date);
+      d.setHours(d.getHours() + hours);
+      return d;
+    };
+    const formatDate = (value, { offsetHours = 0 } = {}) => {
       try {
+        const date = offsetHours !== 0 ? addHours(value, offsetHours) : new Date(value);
         return new Intl.DateTimeFormat(undefined, {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
           hour: '2-digit',
           minute: '2-digit'
-        }).format(new Date(value));
+        }).format(date);
       } catch { return value; }
+    };
+    const getArcadePoints = (rec) => {
+      const priorityKeys = [
+        'ar_points',
+        'ar_points_earned',
+        'ar_score',
+        'ar_score_value',
+        'points',
+        'score'
+      ];
+      for (const key of priorityKeys) {
+        const val = rec?.[key];
+        const num = Number(val);
+        if (Number.isFinite(num)) return num;
+      }
+      const numericCandidates = Object.entries(rec ?? {}).filter(([key, val]) => {
+        const num = Number(val);
+        if (!Number.isFinite(num)) return false;
+        if (/id$|_id$|uuid|difficulty|correct|created|timestamp|time/i.test(key)) return false;
+        return true;
+      });
+      if (numericCandidates.length) {
+        const best = numericCandidates.sort((a, b) => Math.abs(Number(b[1])) - Math.abs(Number(a[1])))[0];
+        return Number(best[1]);
+      }
+      return 0;
+    };
+    const isStaff = (user) => {
+      const uname = (user?.username ?? '').toLowerCase();
+      return staffUsernames.has(uname);
+    };
+    const filterState = (base) => {
+      if (includeStaff || !base) return base;
+      if (!base.users || !base.timeline || !base.arcade || !base.arcade.byUser || !base.arcade.timeline) return base;
+      const filteredUsers = base.users.filter((u) => !isStaff(u));
+      const usersById = new Map(filteredUsers.map((u) => [u.id, u]));
+      const timeline = base.timeline.filter((t) => usersById.has(t.userId));
+      const arcadeTimeline = base.arcade.timeline.filter((t) => usersById.has(t.userId));
+      const arcadeByUser = new Map();
+      base.arcade.byUser.forEach((entry, userId) => {
+        if (usersById.has(userId)) {
+          arcadeByUser.set(userId, entry);
+        }
+      });
+      return {
+        users: filteredUsers,
+        timeline,
+        usersById,
+        arcade: {
+          byUser: arcadeByUser,
+          timeline: arcadeTimeline
+        }
+      };
+    };
+    const isCorrect = (val) => {
+      if (val === true) return true;
+      if (val === false) return false;
+      if (typeof val === 'string') {
+        return val.toLowerCase() === 'true' || val === '1';
+      }
+      if (typeof val === 'number') return val === 1;
+      return false;
+    };
+    const formatCarbon = (kg) => {
+      const n = Number(kg) || 0;
+      if (n === 0) return null;
+      if (n >= 1) return `${n.toFixed(2)} kg CO₂e`;
+      return `${(n * 1000).toFixed(1)} g CO₂e`;
+    };
+    const formatMaterials = (materials) => {
+      if (!materials) return '';
+      if (Array.isArray(materials)) {
+        return materials
+          .map((item) => {
+            if (typeof item === 'object' && item !== null) {
+              return Object.entries(item)
+                .map(([k, v]) => `${k}: ${v}`)
+                .join(', ');
+            }
+            return String(item);
+          })
+          .join(', ');
+      }
+      if (typeof materials === 'object') {
+        return Object.entries(materials)
+          .map(([k, v]) => `${k}: ${v}`)
+          .join(', ');
+      }
+      return String(materials);
     };
 
     if (!SUPABASE_URL || !SUPABASE_KEY) {
@@ -200,16 +531,31 @@
       statusEl.classList.add('error');
     } else {
       const restHeaders = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+      const applyStaffStyle = (el) => {
+        if (!el) return;
+        el.style.borderColor = 'rgba(96, 108, 59, 0.22)';
+        el.style.background = 'rgba(96, 108, 59, 0.1)';
+      };
       async function fetchJson(view, query = '') {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/${view}${query}`, { headers: restHeaders });
         if (!response.ok) throw new Error(await response.text() || response.statusText);
         return response.json();
       }
       async function loadData() {
-        const [users, records] = await Promise.all([
+        const [users, records, arcadeRecords] = await Promise.all([
           fetchJson('users', '?select=id,username,displayname,email,points,created&order=points.desc'),
-          fetchJson('records', '?select=r_user_id,r_points,r_mission_id,r_created,missions(m_name,m_type)')
+          fetchJson('records', '?select=r_user_id,r_points,r_mission_id,r_created,r_info,missions(m_name,m_type,m_emoji)'),
+          fetchJson('arcaderecords', '?select=*')
         ]);
+        const parseInfo = (raw) => {
+          if (!raw) return {};
+          if (typeof raw === 'object') return raw;
+          try {
+            return JSON.parse(raw);
+          } catch {
+            return {};
+          }
+        };
         const grouped = new Map();
         records.forEach((rec) => {
           const arr = grouped.get(rec.r_user_id) ?? [];
@@ -218,34 +564,95 @@
         });
         const usersWithRecords = users.map((user) => ({
           ...user,
-          records: (grouped.get(user.id) ?? []).map((rec) => ({
-            missionName: rec.missions?.m_name ?? rec.r_mission_id,
-            missionType: rec.missions?.m_type ?? 'unknown',
-            points: rec.r_points,
-            created: rec.r_created
-          })).sort((a, b) => new Date(b.created) - new Date(a.created))
+          records: (grouped.get(user.id) ?? []).map((rec) => {
+            const info = parseInfo(rec.r_info);
+            return {
+              missionName: rec.missions?.m_name ?? rec.r_mission_id,
+              missionEmoji: rec.missions?.m_emoji ?? '',
+              points: rec.r_points,
+              created: rec.r_created,
+              carbonKg: info?.carbonKg ?? info?.carbonkg ?? info?.carbon_kg ?? 0,
+              materials: info?.materials ?? info?.material ?? null
+            };
+          }).sort((a, b) => new Date(b.created) - new Date(a.created))
         }));
         const timeline = records
-          .map((rec) => ({
-            missionName: rec.missions?.m_name ?? rec.r_mission_id,
-            missionType: rec.missions?.m_type ?? 'unknown',
-            points: rec.r_points,
-            created: rec.r_created,
-            userId: rec.r_user_id
-          }))
+          .map((rec) => {
+            const info = parseInfo(rec.r_info);
+            return {
+              missionName: rec.missions?.m_name ?? rec.r_mission_id,
+              missionEmoji: rec.missions?.m_emoji ?? '',
+              points: rec.r_points,
+              created: rec.r_created,
+              userId: rec.r_user_id,
+              carbonKg: info?.carbonKg ?? info?.carbonkg ?? info?.carbon_kg ?? 0,
+              materials: info?.materials ?? info?.material ?? null
+            };
+          })
           .sort((a, b) => new Date(b.created) - new Date(a.created));
-        return { users: usersWithRecords, timeline, usersById: new Map(users.map((u) => [u.id, u])) };
+        const arcadeByUser = new Map();
+        const arcadeTimeline = arcadeRecords
+          .map((rec) => {
+            const difficulty = Number(rec.ar_difficulty ?? 0);
+            const safeDifficulty = Number.isFinite(difficulty) ? difficulty : 0;
+            const correct = isCorrect(rec.ar_correct);
+            const points = correct ? safeDifficulty : 0;
+            return {
+              userId: rec.ar_user_id,
+              difficulty: safeDifficulty,
+              correct,
+              points,
+              created: rec.created_at
+            };
+          })
+          .sort((a, b) => new Date(b.created ?? 0) - new Date(a.created ?? 0));
+        arcadeTimeline.forEach((rec) => {
+          const entry = arcadeByUser.get(rec.userId) ?? {
+            userId: rec.userId,
+            totalCorrect: 0,
+            totalWrong: 0,
+            totalPoints: 0,
+            perDifficulty: new Map()
+          };
+          if (rec.correct) entry.totalCorrect += 1;
+          else entry.totalWrong += 1;
+          entry.totalPoints += rec.points;
+          const diff = entry.perDifficulty.get(rec.difficulty) ?? { correct: 0, wrong: 0, points: 0 };
+          if (rec.correct) diff.correct += 1;
+          else diff.wrong += 1;
+          diff.points += rec.points;
+          entry.perDifficulty.set(rec.difficulty, diff);
+          arcadeByUser.set(rec.userId, entry);
+        });
+        return {
+          users: usersWithRecords,
+          timeline,
+          usersById: new Map(users.map((u) => [u.id, u])),
+          arcade: {
+            byUser: arcadeByUser,
+            timeline: arcadeTimeline
+          }
+        };
+      }
+      function setSummary(text = '') {
+        if (!summaryEl) return;
+        summaryEl.textContent = text;
+        summaryEl.classList.toggle('hidden', !text);
       }
       function renderUsers(data) {
         viewEl.innerHTML = '';
         if (!data.users.length) {
           viewEl.textContent = 'No users found.';
+          setSummary('Total users: 0');
           return;
         }
+        setSummary(`Total users: ${data.users.length}`);
         data.users.forEach((user) => {
       const card = document.createElement('div');
       card.className = 'card';
-      if ((user.points ?? 0) === 0) {
+      if (isStaff(user)) {
+        applyStaffStyle(card);
+      } else if ((user.points ?? 0) === 0) {
         card.style.borderColor = 'rgba(255, 99, 132, 0.4)';
         card.style.background = 'rgba(255, 241, 244, 0.7)';
       }
@@ -265,7 +672,14 @@
           } else {
             user.records.forEach((record) => {
               const li = document.createElement('li');
-              li.innerHTML = `<strong>${record.missionName}</strong> <span class="muted">(${record.missionType})</span> · ${record.points} pts · <span class="muted">${formatDate(record.created)}</span>`;
+              const emoji = record.missionEmoji ? `${record.missionEmoji} ` : '';
+              const carbonLabel = formatCarbon(record.carbonKg);
+              const materialsLabel = formatMaterials(record.materials);
+              const infoParts = [];
+              if (materialsLabel) infoParts.push(`ℹ️ Materials: ${materialsLabel}`);
+              if (carbonLabel) infoParts.push(`🌿 ${carbonLabel}`);
+              const infoLine = infoParts.length ? `<div class="muted" style="font-size:14px;">${infoParts.join(' · ')}</div>` : '';
+              li.innerHTML = `<strong>${emoji}${record.missionName}</strong> · ${record.points} pts · <span class="muted">${formatDate(record.created)}</span>${infoLine}`;
               list.append(li);
             });
           }
@@ -277,16 +691,112 @@
         viewEl.innerHTML = '';
         if (!data.timeline.length) {
           viewEl.textContent = 'No missions completed yet.';
+          setSummary('Total missions completed: 0');
           return;
         }
+        setSummary(`Total missions completed: ${data.timeline.length}`);
         data.timeline.forEach((mission) => {
           const card = document.createElement('div');
           card.className = 'card timeline-card';
           const user = data.usersById.get(mission.userId);
-          card.innerHTML = `<header><div><h3>${mission.missionName}</h3><div class="muted">${mission.missionType}</div></div><div class="pill">${mission.points} pts</div></header>`;
+          if (isStaff(user)) applyStaffStyle(card);
+          const emoji = mission.missionEmoji ? `${mission.missionEmoji} ` : '';
+          const carbonLabel = formatCarbon(mission.carbonKg);
+          const materialsLabel = formatMaterials(mission.materials);
+          card.innerHTML = `
+            <header class="mission-header">
+              <div class="mission-title">
+                ${mission.missionEmoji ? `<span class="mission-emoji">${mission.missionEmoji}</span>` : ""}
+                <div class="mission-title-text">
+                  <h3>${mission.missionName}</h3>
+                  ${materialsLabel ? `<span class="muted mission-materials">Materials: ${materialsLabel}</span>` : ''}
+                </div>
+              </div>
+              <div class="mission-meta">
+                <div class="mission-stats">
+                  ${carbonLabel ? `<span class="muted mission-carbon">🌿 ${carbonLabel}</span>` : ''}
+                  <div class="pill"><span>${mission.points} pts</span></div>
+                </div>
+                <span class="muted">📅 ${formatDate(mission.created)}</span>
+              </div>
+            </header>
+          `;
           const meta = document.createElement('div');
           meta.className = 'timeline-meta';
-          meta.innerHTML = `<span class="username-badge">${user?.username ?? 'unknown user'}</span><span class="muted">${formatDate(mission.created)}</span>`;
+          meta.innerHTML = `
+            <span class="username-badge">${user?.username ?? 'unknown user'}</span>
+          `;
+          card.append(meta);
+          viewEl.append(card);
+        });
+      }
+      function renderArcadeUsers(data) {
+        viewEl.innerHTML = '';
+        const entries = Array.from(data.arcade.byUser.values());
+        if (!entries.length) {
+          viewEl.textContent = 'No arcade records found.';
+          setSummary('Total users who tried arcade mode: 0');
+          return;
+        }
+        setSummary(`Total users who tried arcade mode: ${entries.length}`);
+        const difficulties = [0, 1, 3];
+        entries
+          .sort((a, b) => (b.totalPoints ?? 0) - (a.totalPoints ?? 0))
+          .forEach((entry) => {
+            const user = data.usersById.get(entry.userId);
+            const card = document.createElement('div');
+            card.className = 'card';
+            if (isStaff(user)) applyStaffStyle(card);
+            const header = document.createElement('header');
+            header.innerHTML = `<div><h3>${user?.username || '(user)'}</h3><div class="muted">${user?.displayname || ''}</div></div>`;
+            const pill = document.createElement('div');
+            pill.className = 'pill';
+            pill.textContent = `${entry.totalPoints.toLocaleString()} pts`;
+            header.append(pill);
+            card.append(header);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper';
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            thead.innerHTML = '<tr><th>Difficulty</th><th>Correct</th><th>Wrong</th><th>Points Earned</th></tr>';
+            table.append(thead);
+            const tbody = document.createElement('tbody');
+            const allDiffs = [...new Set([...difficulties, ...entry.perDifficulty.keys()])].sort((a, b) => a - b);
+            allDiffs.forEach((diff) => {
+              const stats = entry.perDifficulty.get(diff) ?? { correct: 0, wrong: 0, points: 0 };
+              const row = document.createElement('tr');
+              row.innerHTML = `<td>${diff}</td><td>${stats.correct}</td><td>${stats.wrong}</td><td>${stats.points.toLocaleString()}</td>`;
+              tbody.append(row);
+            });
+            const totalRow = document.createElement('tr');
+            totalRow.innerHTML = `<td><strong>Total</strong></td><td><strong>${entry.totalCorrect}</strong></td><td><strong>${entry.totalWrong}</strong></td><td><strong>${entry.totalPoints.toLocaleString()}</strong></td>`;
+            tbody.append(totalRow);
+            table.append(tbody);
+            wrapper.append(table);
+            card.append(wrapper);
+            viewEl.append(card);
+          });
+      }
+      function renderArcadeTimeline(data) {
+        viewEl.innerHTML = '';
+        if (!data.arcade.timeline.length) {
+          viewEl.textContent = 'No arcade missions found.';
+          setSummary('Total arcade missions completed: 0');
+          return;
+        }
+        setSummary(`Total arcade missions completed: ${data.arcade.timeline.length}`);
+        data.arcade.timeline.forEach((entry) => {
+          const user = data.usersById.get(entry.userId);
+          const card = document.createElement('div');
+          card.className = 'card timeline-card';
+          if (isStaff(user)) applyStaffStyle(card);
+          const statusText = entry.correct ? 'Correct' : 'Wrong';
+          const pillClass = entry.correct ? 'pill pill-success' : 'pill pill-fail';
+          const symbol = entry.correct ? '✔' : '✖';
+          card.innerHTML = `<header><div><h3>Arcade · Difficulty ${entry.difficulty}</h3><div class="muted">${statusText}</div></div><div class="${pillClass}"><span>${symbol}</span><span>${entry.points.toLocaleString()} pts</span></div></header>`;
+          const meta = document.createElement('div');
+          meta.className = 'timeline-meta';
+          meta.innerHTML = `<span class="username-badge">${user?.username ?? 'unknown user'}</span><span class="muted">${formatDate(entry.created)}</span>`;
           card.append(meta);
           viewEl.append(card);
         });
@@ -295,23 +805,28 @@
         viewEl.innerHTML = '';
         if (!data.users.length) {
           viewEl.textContent = 'No users found.';
+          setSummary('Total users: 0');
           return;
         }
+        setSummary(`Total users: ${data.users.length}`);
         const card = document.createElement('div');
         card.className = 'card';
         const wrapper = document.createElement('div');
         wrapper.className = 'table-wrapper';
         const table = document.createElement('table');
-        table.innerHTML = '<thead><tr><th>Name</th><th>Email</th><th>Points</th><th>Created</th></tr></thead>';
+        table.innerHTML = '<thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Points</th><th>Created</th></tr></thead>';
         const tbody = document.createElement('tbody');
         [...data.users]
           .sort((a, b) => new Date(b.created ?? 0) - new Date(a.created ?? 0))
           .forEach((user) => {
             const row = document.createElement('tr');
-            if ((user.points ?? 0) === 0) {
+            if (isStaff(user)) {
+              row.style.background = 'rgba(96, 108, 59, 0.1)';
+              row.style.borderColor = 'rgba(96, 108, 59, 0.22)';
+            } else if ((user.points ?? 0) === 0) {
               row.style.background = 'rgba(255, 241, 244, 0.8)';
             }
-            row.innerHTML = `<td>${user.displayname || user.username || '(user)'}</td><td>${user.email ?? ''}</td><td>${user.points ?? 0}</td><td>${user.created ? formatDate(user.created) : ''}</td>`;
+            row.innerHTML = `<td>${user.displayname || user.username || '(user)'}</td><td>${user.username || ''}</td><td>${user.email ?? ''}</td><td>${user.points ?? 0}</td><td>${user.created ? formatDate(user.created, { offsetHours: 8 }) : ''}</td>`;
             tbody.append(row);
           });
         table.append(tbody);
@@ -321,15 +836,27 @@
       }
       function render() {
         if (!state) return;
-        if (currentMode === 'users') renderUsers(state);
-        else if (currentMode === 'missions') renderTimeline(state);
-        else renderDirectory(state);
+        const viewState = filterState(state) || state;
+        if (!viewState) {
+          viewEl.textContent = 'No data loaded.';
+          setSummary('');
+          return;
+        }
+        if (currentMode === 'users') renderUsers(viewState);
+        else if (currentMode === 'missions') renderTimeline(viewState);
+        else if (currentMode === 'arcade-users') renderArcadeUsers(viewState);
+        else if (currentMode === 'arcade-timeline') renderArcadeTimeline(viewState);
+        else renderDirectory(viewState);
       }
       tabs.forEach((tab) => tab.addEventListener('click', () => {
         currentMode = tab.dataset.mode;
         tabs.forEach((btn) => btn.classList.toggle('active', btn === tab));
         render();
       }));
+      includeStaffToggle?.addEventListener('change', (e) => {
+        includeStaff = e.target.checked;
+        render();
+      });
       (async () => {
         try {
           statusEl.textContent = 'Loading data…';
@@ -344,4 +871,5 @@
     }
   </script>
 </body>
+
 </html>
